@@ -159,5 +159,15 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(r.stdout.split(), ["a", "b"])
 
 
+    def test_get_default(self):
+        r = self.run_jtool("get", "a.nope", "--default", "N/A", input_text='{"a": 1}')
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(r.stdout.strip(), "N/A")
+
+    def test_get_missing_without_default_fails(self):
+        r = self.run_jtool("get", "a.nope", input_text='{"a": 1}')
+        self.assertNotEqual(r.returncode, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
